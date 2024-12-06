@@ -39,7 +39,11 @@ class Product:
             raise Exception("The product is inactive and cannot be purchased.")
         if quantity > self.quantity:
             raise Exception("Insufficient product in stock.")
+        self.quantity -= quantity
+        if self.quantity == 0:
+            self.active = False
+        return quantity * self.price
 
-        total_price = quantity * self.price
-        self.set_quantity(self.quantity - quantity)
-        return total_price
+        # total_price = quantity * self.price
+        # self.set_quantity(self.quantity - quantity)
+        # return total_price

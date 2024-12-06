@@ -76,15 +76,3 @@ if __name__ == "__main__":
 
     best_buy = Store(product_list)
     start(best_buy)
-
-    # active_products = best_buy.get_all_products()
-    # for product in active_products:
-    #     print(product.show())
-    #
-    # print("Total quantity in store:", best_buy.get_total_quantity())
-    #
-    # try:
-    #     price = best_buy.order([(product_list[0], 1), (product_list[1], 2)])
-    #     print(f"Order cost: {price} dollars.")
-    # except Exception as e:
-    #     print(e)
