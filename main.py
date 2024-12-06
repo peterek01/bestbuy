@@ -75,4 +75,9 @@ if __name__ == "__main__":
                     ]
 
     best_buy = Store(product_list)
+<<<<<<< HEAD
     start(best_buy)
+=======
+    start(best_buy)
+    
+>>>>>>> 32db7406f46a043a60985f7fb3e9d482efeb1561
