@@ -1,10 +1,10 @@
-
 class Product:
     def __init__(self, name, price, quantity):
         self.name = name
         self.price = price
         self.quantity = quantity
         self.active = True
+        self.promotion = None
 
         if not name:
             raise ValueError("Name cannot be empty.")
@@ -31,18 +31,31 @@ class Product:
     def deactivate(self):
         self.active = False
 
-    def show(self) -> str:
-        return f"{self.name}, Price: {self.price}, Quantity: {self.get_quantity()}"
+    def get_promotion(self):
+        return self.promotion
 
-    def buy(self, quantity) -> float:
+    def set_promotion(self, promotion):
+        self.promotion = promotion
+
+    def show(self) -> str:
+        product_info = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+        if self.promotion:
+            product_info += f" - Promotion: {self.promotion.name}"
+        return product_info
+
+    def buy(self, quantity):
         if not self.active:
             raise Exception("The product is inactive and cannot be purchased.")
         if quantity > self.quantity:
             raise Exception("Insufficient product in stock.")
+
+        if self.promotion:
+            final_price, promo_message = self.promotion.apply_promotion(self, quantity)
+            print(promo_message)
+        else:
+            final_price = self.price * quantity
         self.quantity -= quantity
-        if self.quantity == 0:
-            self.deactivate()
-        return quantity * self.price
+        return final_price
 
 
 class NonStockedProduct(Product):

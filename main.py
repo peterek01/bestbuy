@@ -1,4 +1,5 @@
 from products import Product, NonStockedProduct, LimitedProduct
+from promotion import PercentageDiscountPromotion, SecondItemHalfPricePromotion, Buy2Get1FreePromotion
 from store import Store
 
 
@@ -42,25 +43,13 @@ def start(store: Store):
                         continue
 
                     product = active_products[product_number - 1]
+                    quantity = int(input(f"Enter quantity for {product.name}: "))
 
-                    while True:
-                        try:
-                            quantity = int(input(f"Enter quantity for {product.name}: "))
+                    if quantity <= 0:
+                        print("Quantity must be greater than 0. Please try again.")
+                        continue
 
-                            if quantity <= 0:
-                                print("Quantity must be greater than 0. Please try again.")
-                                continue
-
-                            if isinstance(product, LimitedProduct) and quantity > product.max_per_order:
-                                print(f"Cannot add more than {product.max_per_order} of {product.name}.")
-                                continue
-
-                            # Dodanie produktu do zamówienia, jeśli ilość jest poprawna
-                            shopping_list.append((product, quantity))
-                            break
-
-                        except ValueError:
-                            print("Invalid input. Please enter numbers only.")
+                    shopping_list.append((product, quantity))
                 except ValueError:
                     print("Invalid input. Please enter numbers only.")
 
@@ -89,5 +78,13 @@ if __name__ == "__main__":
         LimitedProduct("Shipping Fee", price=10, quantity=1, max_per_order=1)
     ]
 
-store = Store(product_list)
-start(store)
+    discount_percent = PercentageDiscountPromotion("30% off", 30)
+    second_half_price = SecondItemHalfPricePromotion()
+    third_one_free = Buy2Get1FreePromotion()
+
+    product_list[0].set_promotion(discount_percent)  # 30% off
+    product_list[1].set_promotion(second_half_price)  # second item 50%
+    product_list[2].set_promotion(third_one_free)  # buy 2, get 1 for free
+
+    store = Store(product_list)
+    start(store)
