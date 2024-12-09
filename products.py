@@ -10,7 +10,7 @@ class Product:
             raise ValueError("Name cannot be empty.")
         if price <= 0:
             raise ValueError("Price must be greater than zero.")
-        if quantity <= 0:
+        if quantity < 0:
             raise ValueError("Quantity must be greater than zero.")
 
     def get_quantity(self) -> float:
@@ -41,9 +41,35 @@ class Product:
             raise Exception("Insufficient product in stock.")
         self.quantity -= quantity
         if self.quantity == 0:
-            self.active = False
+            self.deactivate()
         return quantity * self.price
 
-        # total_price = quantity * self.price
-        # self.set_quantity(self.quantity - quantity)
-        # return total_price
+
+class NonStockedProduct(Product):
+    def __init__(self, name, price):
+        super().__init__(name, price, quantity=0)
+
+    def buy(self, amount):
+        if not self.is_active():
+            raise ValueError(f"The product '{self.name}' is not active.")
+        return amount * self.price
+
+    def show(self):
+        return f"{self.name} (Non-stocked), Prise: {self.price}"
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, max_per_order):
+        super().__init__(name, price, quantity)
+        self.max_per_order = max_per_order
+
+    def buy(self, amount):
+        if amount > self.max_per_order:
+            raise ValueError(f"Cannot buy {amount}. Maximum allowed per order is {self.max_per_order}.")
+        return super().buy(amount)
+
+    def show(self):
+        return (
+            f"{self.name} (Limited), Price: {self.price}, "
+            f"Quantity: {self.quantity}, Max per order: {self.max_per_order}"
+        )

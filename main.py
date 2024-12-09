@@ -1,4 +1,4 @@
-from products import Product
+from products import Product, NonStockedProduct, LimitedProduct
 from store import Store
 
 
@@ -42,13 +42,25 @@ def start(store: Store):
                         continue
 
                     product = active_products[product_number - 1]
-                    quantity = int(input(f"Enter quantity for {product.name}: "))
 
-                    if quantity <= 0:
-                        print("Quantity must be greater than 0. Please try again.")
-                        continue
+                    while True:
+                        try:
+                            quantity = int(input(f"Enter quantity for {product.name}: "))
 
-                    shopping_list.append((product, quantity))
+                            if quantity <= 0:
+                                print("Quantity must be greater than 0. Please try again.")
+                                continue
+
+                            if isinstance(product, LimitedProduct) and quantity > product.max_per_order:
+                                print(f"Cannot add more than {product.max_per_order} of {product.name}.")
+                                continue
+
+                            # Dodanie produktu do zamówienia, jeśli ilość jest poprawna
+                            shopping_list.append((product, quantity))
+                            break
+
+                        except ValueError:
+                            print("Invalid input. Please enter numbers only.")
                 except ValueError:
                     print("Invalid input. Please enter numbers only.")
 
@@ -69,15 +81,13 @@ def start(store: Store):
 
 
 if __name__ == "__main__":
-    product_list = [Product("MacBook Air M2", price=1450, quantity=100),
-                    Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                    Product("Google Pixel 7", price=500, quantity=250)
-                    ]
+    product_list = [
+        Product("MacBook Air M2", price=1450, quantity=100),
+        Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+        Product("Google Pixel 7", price=500, quantity=250),
+        NonStockedProduct("Windows License", price=120),
+        LimitedProduct("Shipping Fee", price=10, quantity=1, max_per_order=1)
+    ]
 
-    best_buy = Store(product_list)
-<<<<<<< HEAD
-    start(best_buy)
-=======
-    start(best_buy)
-    
->>>>>>> 32db7406f46a043a60985f7fb3e9d482efeb1561
+store = Store(product_list)
+start(store)
