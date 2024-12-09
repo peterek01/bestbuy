@@ -15,8 +15,8 @@ def start(store: Store):
 
         if choice == "1":
             print("\nAvailable products:")
-            for product in store.get_all_products():
-                print(product.show())
+            for idx, product in enumerate(store.get_all_products(), start=1):
+                print(f"{idx}. {product}")
         elif choice == "2":
             print(f"\nTotal quantity in store: {store.get_total_quantity()}")
         elif choice == "3":
@@ -30,7 +30,7 @@ def start(store: Store):
 
             print("Available products:")
             for idx, product in enumerate(active_products, start=1):
-                print(f"{idx}. {product.show()}")
+                print(f"{idx}. {product}")
 
             while True:
                 try:
@@ -88,3 +88,6 @@ if __name__ == "__main__":
 
     store = Store(product_list)
     start(store)
+
+    for product in product_list:
+        print(product)

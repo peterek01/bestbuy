@@ -37,11 +37,17 @@ class Product:
     def set_promotion(self, promotion):
         self.promotion = promotion
 
-    def show(self) -> str:
+    def __str__(self):
         product_info = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
         if self.promotion:
             product_info += f" - Promotion: {self.promotion.name}"
         return product_info
+
+    # def show(self) -> str:
+    #     product_info = f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+    #     if self.promotion:
+    #         product_info += f" - Promotion: {self.promotion.name}"
+    #     return product_info
 
     def buy(self, quantity):
         if not self.active:
